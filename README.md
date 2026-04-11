@@ -1,8 +1,8 @@
-# RTI Online Automation Instructions using Playwright CLI
+# RTI Online Automation using Playwright CLI + Claude Code
 
-This repository provides a generalized, reusable instruction set for automating RTI request submission on the RTI Online portal using Playwright CLI and an automation agent such as Claude Code.
+Automate filing an RTI request on https://rtionline.gov.in/ using Playwright CLI and Claude Code by executing a reusable instruction file.
 
-The automation is driven entirely by the instruction file and can be reused by replacing placeholder values.
+This repository is designed so that **Claude Code reads a markdown instruction file and performs all actions automatically**, with minimal human input.
 
 ---
 
@@ -10,15 +10,16 @@ The automation is driven entirely by the instruction file and can be reused by r
 
 This setup enables:
 
-* Step by step automation of RTI filing
-* Compatibility with AI agents executing instructions
-* Minimal manual intervention limited to OTP and payment
+* End-to-end RTI filing automation via instructions
+* Execution through Claude Code (agent-driven)
+* Reusable template with configurable inputs
+* Minimal manual steps (OTP + payment only)
 
 ---
 
 ## Prerequisites
 
-Run the following commands in your system terminal:
+Run the following in your system terminal:
 
 ```
 npm install -g @playwright/cli@latest
@@ -26,143 +27,153 @@ playwright-cli --help
 npx playwright install chromium
 ```
 
-Ensure:
+Make sure:
 
 * Node.js is installed
-* Playwright CLI is available
+* Playwright CLI is working
 * Chromium browser is installed
+
+---
+
+## How to Use
+
+1. Clone or download this repository
+2. Open the project in Claude Code
+3. Update placeholders in `rti_submit_request.md` (see Configuration below)
+4. In Claude Code terminal, run:
+
+```
+run instructions from rti_submit_request.md
+```
+
+5. Claude will execute all steps automatically
 
 ---
 
 ## Configuration
 
-Before execution, replace all placeholder values in the instruction file:
+Replace the following placeholders in the instruction file:
 
-```
-<USER_EMAIL>
-<USER_MOBILE>
-<USER_NAME>
-<ADDRESS_LINE_1>
-<ADDRESS_LINE_2>
-<ADDRESS_LINE_3>
-<PINCODE>
-<STATE_NAME>
-<USER_PHONE>
-<MINISTRY_ID>
-<DEPARTMENT_NAME>
-<RTI_TEXT>
-```
-
----
-
-## How to Execute using Claude Code
-
-1. Open Claude Code terminal
-
-2. Navigate to the repository directory
-
-3. Run the following instruction:
-
-```
-Follow the step by step instructions in rti_submit_request.md and execute them using playwright-cli
-```
-
-4. The agent will execute all steps sequentially
+| Placeholder         | Description         | Example                                 |
+| ------------------- | ------------------- | --------------------------------------- |
+| `<USER_EMAIL>`      | Your email          | `john@gmail.com`                        |
+| `<USER_MOBILE>`     | Mobile number       | `12345685`                            |
+| `<USER_NAME>`       | Full name           | `John Doe`                              |
+| `<ADDRESS_LINE_1>`  | Address line 1      | `Flat 12, ABC Building`                 |
+| `<ADDRESS_LINE_2>`  | Address line 2      | `MG Road`                               |
+| `<ADDRESS_LINE_3>`  | City & state        | `Mumbai, Maharashtra`                   |
+| `<PINCODE>`         | PIN code            | `400001`                                |
+| `<STATE_NAME>`      | State               | `Maharashtra`                           |
+| `<USER_PHONE>`      | Phone number        | `12345685`                            |
+| `<MINISTRY_ID>`     | Ministry numeric ID | `47`                                    |
+| `<DEPARTMENT_NAME>` | Department name     | `Department of Health & Family Welfare` |
+| `<RTI_TEXT>`        | RTI query text      | Custom query                            |
 
 ---
 
 ## Execution Flow
 
-1. Open RTI Online portal
-2. Navigate to Submit Request
-3. Enter email and mobile number
-4. Capture and solve captcha
-5. Submit and accept OTP dialog
-6. Enter OTP received via email
-7. Fill RTI request form
-8. Capture and solve second captcha
-9. Submit form and handle retries
-10. Proceed to payment gateway
-11. Select UPI and generate QR code
-12. Complete payment
-13. Capture confirmation
+Claude Code performs:
+
+1. Opens RTI portal
+2. Navigates to "Submit Request"
+3. Fills email & mobile
+4. Solves captcha (via screenshot)
+5. Handles OTP verification
+6. Fills RTI form
+7. Solves second captcha
+8. Submits request
+9. Navigates to payment
+10. Generates UPI QR
+11. Waits for payment
+12. Captures confirmation
 
 ---
 
 ## Manual Inputs Required
 
-### OTP
+### OTP (Required)
 
-* Sent to registered email
-* Must be entered manually
-* Use latest OTP if validation fails
+* Sent to your email
+* Claude will pause and ask for it
+* Always provide the **latest OTP**
 
-### Payment
+---
 
-* QR code will be generated
-* Scan using UPI app
-* Confirm completion within time limit
+### Payment (Required)
+
+* QR code will be generated (`rti_upi_qr.png`)
+* Scan using any UPI app
+* Complete ₹10 payment within ~2 minutes
 
 ---
 
 ## Captcha Handling
 
-* Captcha images are captured using screenshots
-* Read text from image and input value
-* Case insensitive
-* Retry if incorrect
+* Captcha is auto-captured as image
+* Claude reads and fills it
+* If incorrect, it retries
+
+**Common mistakes:**
+
+* `1`, `l`, `I`
+* `0`, `O`
+* `f`, `r`
 
 ---
 
 ## Output Files
 
-* captcha1.png
-* captcha2.png
-* rti_upi_qr.png
-* rti_registration_confirmed.png
+Generated during execution:
+
+* `rti_submit_captcha.png`
+* `rti_form_captcha.png`
+* `rti_upi_qr.png`
+* `rti_registration_confirmed.png`
 
 ---
 
 ## Important Notes
 
-* RTI filing fee is 10 rupees
-* QR code expires in about 2 minutes
-* OTP is email based only
+* RTI fee: ₹10
+* OTP is email-only (no SMS)
 * Ministry selection works best with numeric ID
-* Some pages may show errors after payment this is expected
+* Department dropdown may timeout (expected behavior)
+* After payment, RTI site may show error page — **this is normal**
 * Registration number is sent via email
 
 ---
 
 ## Failure Handling
 
-* If OTP does not match use latest OTP
-* If captcha fails retry with new value
-* If selection times out continue and accept dialog
-* Always accept confirmation dialogs
+* OTP mismatch → use latest email OTP
+* Captcha failure → auto retry
+* Department select timeout → ignore and continue
+* Payment timeout → restart from payment step
 
 ---
 
 ## Limitations
 
-* Full automation is not possible due to:
+Full automation is not possible due to:
 
-  * Captcha verification
-  * OTP authentication
-  * Payment confirmation
+* Captcha verification
+* OTP authentication
+* UPI payment confirmation
 
 ---
 
 ## Best Practices
 
-* Execute steps exactly as defined
-* Do not skip steps
+* Do not modify instruction steps unnecessarily
+* Replace all placeholders before running
 * Ensure stable internet connection
-* Complete payment quickly after QR generation
+* Complete payment quickly
 
 ---
 
 ## Disclaimer
 
 This project is for educational and automation purposes only.
-Users are responsible for ensuring compliance with applicable laws and terms of use of the RTI Online portal.
+
+Users are responsible for complying with RTI portal terms and applicable laws.
