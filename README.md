@@ -1,22 +1,18 @@
-# RTI Online Automation using Playwright CLI
+# RTI Online Automation Instructions using Playwright CLI
 
-This repository provides a structured instruction set to automate RTI request submission on the RTI Online portal using Playwright CLI and an AI agent such as Claude Code.
+This repository provides a generalized, reusable instruction set for automating RTI request submission on the RTI Online portal using Playwright CLI and an automation agent such as Claude Code.
+
+The automation is driven entirely by the instruction file and can be reused by replacing placeholder values.
 
 ---
 
 ## Overview
 
-This project is designed to:
+This setup enables:
 
-* Automate RTI form submission
-* Work with AI agents that execute step by step instructions
-* Reduce manual effort while handling unavoidable steps like OTP and payment
-
-The automation is driven entirely by the instruction file:
-
-```
-rti_submit_request.md
-```
+* Step by step automation of RTI filing
+* Compatibility with AI agents executing instructions
+* Minimal manual intervention limited to OTP and payment
 
 ---
 
@@ -30,50 +26,40 @@ playwright-cli --help
 npx playwright install chromium
 ```
 
-### Requirements
+Ensure:
 
-* Node.js installed
-* Internet connection
-* Valid email ID
-* Mobile number
-* UPI app for payment
-
----
-
-## Repository Structure
-
-```
-.
-├── rti_submit_request.md   # Instruction file for automation agent
-├── README.md               # Documentation
-```
+* Node.js is installed
+* Playwright CLI is available
+* Chromium browser is installed
 
 ---
 
 ## Configuration
 
-Before execution, update placeholders inside:
-
-```
-rti_submit_request.md
-```
-
-Replace all values such as:
+Before execution, replace all placeholder values in the instruction file:
 
 ```
 <USER_EMAIL>
+<USER_MOBILE>
 <USER_NAME>
+<ADDRESS_LINE_1>
+<ADDRESS_LINE_2>
+<ADDRESS_LINE_3>
+<PINCODE>
+<STATE_NAME>
+<USER_PHONE>
 <MINISTRY_ID>
+<DEPARTMENT_NAME>
 <RTI_TEXT>
 ```
 
 ---
 
-## How to Run Using Claude Code
+## How to Execute using Claude Code
 
 1. Open Claude Code terminal
 
-2. Navigate to the repository folder
+2. Navigate to the repository directory
 
 3. Run the following instruction:
 
@@ -90,52 +76,50 @@ Follow the step by step instructions in rti_submit_request.md and execute them u
 1. Open RTI Online portal
 2. Navigate to Submit Request
 3. Enter email and mobile number
-4. Solve captcha (from screenshot)
-5. Enter OTP (user input required)
-6. Fill RTI request form
-7. Solve second captcha
-8. Submit form and handle retries
-9. Redirect to SBI payment gateway
-10. Generate UPI QR code
-11. User completes payment
-12. Capture confirmation
+4. Capture and solve captcha
+5. Submit and accept OTP dialog
+6. Enter OTP received via email
+7. Fill RTI request form
+8. Capture and solve second captcha
+9. Submit form and handle retries
+10. Proceed to payment gateway
+11. Select UPI and generate QR code
+12. Complete payment
+13. Capture confirmation
 
 ---
 
-## Manual Steps Required
+## Manual Inputs Required
 
 ### OTP
 
-* OTP is sent to email
-* Enter the latest OTP when prompted
+* Sent to registered email
+* Must be entered manually
+* Use latest OTP if validation fails
 
 ### Payment
 
-* Scan QR code using UPI app
-* Confirm payment within time limit
+* QR code will be generated
+* Scan using UPI app
+* Confirm completion within time limit
 
 ---
 
 ## Captcha Handling
 
-* Captcha images are saved as:
-
-  * captcha1.png
-  * captcha2.png
-* Read text directly from image
-* Captcha is case insensitive
+* Captcha images are captured using screenshots
+* Read text from image and input value
+* Case insensitive
 * Retry if incorrect
 
 ---
 
 ## Output Files
 
-```
-captcha1.png
-captcha2.png
-upi_qr.png
-confirmation.png
-```
+* captcha1.png
+* captcha2.png
+* rti_upi_qr.png
+* rti_registration_confirmed.png
 
 ---
 
@@ -143,18 +127,18 @@ confirmation.png
 
 * RTI filing fee is 10 rupees
 * QR code expires in about 2 minutes
-* Always use latest OTP
+* OTP is email based only
 * Ministry selection works best with numeric ID
 * Some pages may show errors after payment this is expected
-* RTI registration number is sent via email
+* Registration number is sent via email
 
 ---
 
 ## Failure Handling
 
-* If OTP fails use latest email OTP
-* If captcha fails retry until correct
-* If page times out continue and check for dialog
+* If OTP does not match use latest OTP
+* If captcha fails retry with new value
+* If selection times out continue and accept dialog
 * Always accept confirmation dialogs
 
 ---
@@ -163,22 +147,22 @@ confirmation.png
 
 * Full automation is not possible due to:
 
-  * Captcha
-  * OTP verification
+  * Captcha verification
+  * OTP authentication
   * Payment confirmation
 
 ---
 
-## Future Improvements
+## Best Practices
 
-* OCR based captcha solving
-* Automatic OTP retrieval from email
-* End to end automation pipeline
-* Logging and retry improvements
+* Execute steps exactly as defined
+* Do not skip steps
+* Ensure stable internet connection
+* Complete payment quickly after QR generation
 
 ---
 
 ## Disclaimer
 
-This project is intended for educational and automation purposes only.
-Users are responsible for complying with applicable laws and terms of use of the RTI Online portal.
+This project is for educational and automation purposes only.
+Users are responsible for ensuring compliance with applicable laws and terms of use of the RTI Online portal.
