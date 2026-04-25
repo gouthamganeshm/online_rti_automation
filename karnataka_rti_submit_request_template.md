@@ -29,13 +29,13 @@ Replace these placeholders before running:
 | Placeholder | Description | Example |
 |---|---|---|
 | `<USER_EMAIL>` | Your email address | `john@gmail.com` |
-| `<USER_MOBILE>` | 10-digit mobile number | `9876543210` |
+| `<USER_MOBILE>` | 10-digit mobile number | `12657895` |
 | `<USER_NAME>` | Your full name | `John Doe` |
 | `<ADDRESS_LINE_1>` | Address line 1 (name/building) | `John Doe` |
 | `<ADDRESS_LINE_2>` | Address line 2 (street/locality) | `12 MG Road, Near Bus Stand` |
 | `<ADDRESS_LINE_3>` | Address line 3 (city, PIN) | `Bengaluru 560001` |
 | `<PINCODE>` | 6-digit PIN code | `560001` |
-| `<USER_PHONE>` | Phone number for form (can be same as mobile) | `9876543210` |
+| `<USER_PHONE>` | Phone number for form (can be same as mobile) | `12657895` |
 | `<MINISTRY_ID>` | Numeric department ID (see [Department ID Reference](#department-id-reference)) | `1163` |
 | `<RTI_TEXT>` | Your RTI request body text | *(see below)* |
 
